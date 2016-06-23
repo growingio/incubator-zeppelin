@@ -74,6 +74,7 @@ angular.module('zeppelinWebApp').service('websocketMsgSrv', function($rootScope,
     },
 
     runParagraph: function(paragraphId, paragraphTitle, paragraphData, paragraphConfig, paragraphParams) {
+
       websocketEvents.sendNewEvent({
         op: 'RUN_PARAGRAPH',
         data: {
@@ -81,7 +82,7 @@ angular.module('zeppelinWebApp').service('websocketMsgSrv', function($rootScope,
           title: paragraphTitle,
           paragraph: paragraphData,
           config: paragraphConfig,
-          params: paragraphParams
+          params: window.hookDynamicFormParams(paragraphParams)
         }
       });
     },

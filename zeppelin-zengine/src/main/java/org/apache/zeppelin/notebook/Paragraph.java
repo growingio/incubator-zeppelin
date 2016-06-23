@@ -25,6 +25,7 @@ import org.apache.zeppelin.interpreter.Interpreter.FormType;
 import org.apache.zeppelin.interpreter.InterpreterResult.Code;
 import org.apache.zeppelin.scheduler.Job;
 import org.apache.zeppelin.scheduler.JobListener;
+import org.apache.zeppelin.util.ParamTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -202,7 +203,8 @@ public class Paragraph extends Job implements Serializable, Cloneable {
       Map<String, Input> inputs = Input.extractSimpleQueryParam(scriptBody); // inputs will be built
                                                                              // from script body
       settings.setForms(inputs);
-      script = Input.getSimpleQuery(settings.getParams(), scriptBody);
+      script = Input.getSimpleQuery(ParamTransformer.transform(settings.getParams()), scriptBody);
+      //script = Input.getSimpleQuery(settings.getParams(), scriptBody);
     }
     logger().debug("RUN : " + script);
     try {

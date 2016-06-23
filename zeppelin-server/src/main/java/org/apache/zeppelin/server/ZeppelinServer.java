@@ -41,6 +41,11 @@ import org.apache.zeppelin.scheduler.SchedulerFactory;
 import org.apache.zeppelin.search.SearchService;
 import org.apache.zeppelin.search.LuceneSearch;
 import org.apache.zeppelin.socket.NotebookServer;
+import org.eclipse.jetty.security.ConstraintMapping;
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.SecurityHandler;
+import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.AbstractConnector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -52,6 +57,7 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
@@ -85,6 +91,34 @@ public class ZeppelinServer extends Application {
         notebookRepo, schedulerFactory, replFactory, notebookWsServer, notebookIndex);
   }
 
+  private static SecurityHandler basicAuth(String path) {
+    File realmFile = new File(path);
+    if (realmFile.isFile() == false) {
+      return null;
+    } else {
+      LOG.info("Read realm file " + path);
+    }
+
+    HashLoginService l = new HashLoginService("zeppelin realm", path);
+    l.setRefreshInterval(60000);
+    Constraint constraint = new Constraint();
+    constraint.setName(Constraint.__BASIC_AUTH);
+    constraint.setRoles(new String[]{"user"});
+    constraint.setAuthenticate(true);
+
+    ConstraintMapping cm = new ConstraintMapping();
+    cm.setConstraint(constraint);
+    cm.setPathSpec("/*");
+
+    ConstraintSecurityHandler csh = new ConstraintSecurityHandler();
+    csh.setAuthenticator(new BasicAuthenticator());
+    csh.setRealmName("myrealm");
+    csh.addConstraintMapping(cm);
+    csh.setLoginService(l);
+
+    return csh;
+  }
+
   public static void main(String[] args) throws InterruptedException {
     ZeppelinConfiguration conf = ZeppelinConfiguration.create();
     conf.setProperty("args", args);
@@ -103,7 +137,15 @@ public class ZeppelinServer extends Application {
     contexts.setHandlers(new Handler[]{restApiContext, notebookContext, webApp});
 
     jettyWebServer = setupJettyServer(conf);
+
+    SecurityHandler sch = basicAuth(conf.getRelativeDir("conf/realm.properties"));
+
     jettyWebServer.setHandler(contexts);
+
+
+    if (sch != null) {
+      webApp.setSecurityHandler(sch);
+    }
 
     LOG.info("Starting zeppelin server");
     try {
@@ -276,4 +318,5 @@ public class ZeppelinServer extends Application {
     return singletons;
   }
 }
+
 

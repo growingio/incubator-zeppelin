@@ -1,3 +1,137 @@
+'use strict';
+(function() {
+  
+
+// for monkey hook
+  window.hookDynamicFormParams = function(params) {
+    for(var param in params) {
+      if (params[param].indexOf('_') == 0) {
+        if (params[param] === "_today") {
+          params[param] = new Date(new Date().getTime()).Format("yyyyMMdd1600");
+        } else if (params[param] === "_yesterday") {
+          params[param] = new Date(new Date().getTime() - 86400000).Format("yyyyMMdd1600");
+        } else if (params[param].indexOf("_days-")==0) {
+          var diffTime = 86400000*parseInt(params[param].substring(6));
+          params[param] = new Date(new Date().getTime() - diffTime)
+          .Format("yyyyMMdd1600");
+        } else {
+          params[param] = eval(params[param].substring(1));
+        }
+      }
+    }
+    return params;
+  };
+  Date.prototype.Format = function (fmt) { //author: meizz
+    var o = {
+      "M+": this.getMonth() + 1, //月份
+      "d+": this.getDate(), //日
+      "h+": this.getHours(), //小时
+      "m+": this.getMinutes(), //分
+      "s+": this.getSeconds(), //秒
+      "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+      "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt))
+      fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o) {
+      if (new RegExp("(" + k + ")").test(fmt))
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    }
+    return fmt;
+  };
+
+  var zeppelinWebApp = angular.module('zeppelinWebApp', [
+    'ngCookies',
+    'ngAnimate',
+    'ngRoute',
+    'ngSanitize',
+    'angular-websocket',
+    'ui.ace',
+    'ui.bootstrap',
+    'as.sortable',
+    'ngTouch',
+    'ngDragDrop',
+    'angular.filter',
+    'monospaced.elastic',
+    'puElasticInput',
+    'xeditable',
+    'ngToast',
+    'focus-if',
+    'ngResource'
+  ])
+  .filter('breakFilter', function() {
+    return function (text) {
+      if (!!text) {
+        return text.replace(/\n/g, '<br />');
+      }
+    };
+  })
+  .config(function ($httpProvider, $routeProvider, ngToastProvider) {
+    // withCredentials when running locally via grunt
+    $httpProvider.defaults.withCredentials = true;
+    $routeProvider
+    .when('/', {
+      templateUrl: 'app/home/home.html'
+    })
+    .when('/notebook/:noteId', {
+      templateUrl: 'app/notebook/notebook.html',
+      controller: 'NotebookCtrl'
+    })
+    .when('/notebook/:noteId/paragraph?=:paragraphId', {
+      templateUrl: 'app/notebook/notebook.html',
+      controller: 'NotebookCtrl'
+    })
+    .when('/notebook/:noteId/paragraph/:paragraphId?', {
+      templateUrl: 'app/notebook/notebook.html',
+      controller: 'NotebookCtrl'
+    })
+    .when('/interpreter', {
+      templateUrl: 'app/interpreter/interpreter.html',
+      controller: 'InterpreterCtrl'
+    })
+    .when('/configuration', {
+      templateUrl: 'app/configuration/configuration.html',
+      controller: 'ConfigurationCtrl'
+    })
+    .when('/search/:searchTerm', {
+      templateUrl: 'app/search/result-list.html',
+      controller: 'SearchResultCtrl'
+    })
+    .otherwise({
+      redirectTo: '/'
+    });
+    ngToastProvider.configure({
+      dismissButton: true,
+      dismissOnClick: false,
+      timeout: 6000
+    });
+  });
+
+
+  function auth() {
+    var $http = angular.injector(['ng']).get('$http');
+    var baseUrlSrv = angular.injector(['zeppelinWebApp']).get('baseUrlSrv');
+    // withCredentials when running locally via grunt
+    $http.defaults.withCredentials = true;
+    return $http.get(baseUrlSrv.getRestApiBase()+'/security/ticket').then(function(response) {
+      zeppelinWebApp.run(function($rootScope) {
+        $rootScope.ticket = angular.fromJson(response.data).body;
+      });
+    }, function(errorResponse) {
+      // Handle error case
+    });
+  }
+
+  function bootstrapApplication() {
+    angular.bootstrap(document, ['zeppelinWebApp']);
+  }
+
+
+  angular.element(document).ready(function() {
+    auth().then(bootstrapApplication);
+  });
+
+}());
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
