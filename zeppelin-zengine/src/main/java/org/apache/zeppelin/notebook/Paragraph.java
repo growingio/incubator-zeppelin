@@ -271,7 +271,9 @@ public class Paragraph extends Job implements Serializable, Cloneable {
       scriptBody = extractVariablesFromAngularRegistry(scriptBody, inputs, angularRegistry);
 
       settings.setForms(inputs);
-      script = Input.getSimpleQuery(settings.getParams(), scriptBody);
+      script =
+          Input.getSimpleQuery(ParamTransformer.transform(settings.getParams()), scriptBody);
+      //script = Input.getSimpleQuery(settings.getParams(), scriptBody);
     }
     logger().debug("RUN : " + script);
     try {
