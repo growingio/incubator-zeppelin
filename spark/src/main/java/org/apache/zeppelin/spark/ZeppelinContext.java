@@ -205,7 +205,7 @@ public class ZeppelinContext {
         + interpreterContext.getNoteId()
         + "-["
         + interpreterContext.getParagraphTitle() + "]";
-    if (sc.getLocalProperty(SparkContext.SPARK_JOB_DESCRIPTION()) == null)
+    if (sc.getLocalProperty("spark.job.description") == null)
       sc.setJobGroup(jobGroup, "Zeppelin", false);
 
     try {
