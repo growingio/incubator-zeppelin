@@ -46,7 +46,7 @@ public class ParamTransformer {
     return params;
   }
 
-  static protected Object evalJs(String expressionStr) {
+  protected static Object evalJs(String expressionStr) {
     String jsExpression = "{" + expressionStr + "}";
     Object value;
     try {
@@ -57,10 +57,11 @@ public class ParamTransformer {
     return value;
   }
 
-  static protected Object evalSh(String expressionStr) {
+  protected static Object evalSh(String expressionStr) {
     Object value;
     try {
-      ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", expressionStr).redirectErrorStream(true);
+      ProcessBuilder processBuilder =
+          new ProcessBuilder("bash", "-c", expressionStr).redirectErrorStream(true);
       Process process = processBuilder.start();
 //            ArrayList<String> output = new ArrayList<String>();
       StringBuilder output = new StringBuilder();
