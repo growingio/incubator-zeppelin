@@ -49,6 +49,13 @@
     <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/zeppelin.git</developerConnection>
   </scm>
 
+  <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <url>http://54.223.132.19:8081/nexus/content/repositories/releases</url>
+    </repository>
+  </distributionManagement>
+
   <inceptionYear>2013</inceptionYear>
 
   <modules>
