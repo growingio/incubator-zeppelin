@@ -137,7 +137,7 @@ public class NotebookServer extends WebSocketServlet implements
       /** Lets be elegant here */
       switch (messagereceived.op) {
           case LIST_NOTES:
-            unicastNoteList(conn, subject);
+            unicastNoteList(conn, subject, userAndRoles);
             break;
           case RELOAD_NOTES_FROM_REPO:
             broadcastReloadedNoteList(subject);
@@ -352,8 +352,14 @@ public class NotebookServer extends WebSocketServlet implements
   }
 
   public List<Map<String, String>> generateNotebooksInfo(boolean needsReload,
-      AuthenticationInfo subject) {
+       AuthenticationInfo subject) {
+    return generateNotebooksInfo(needsReload, subject, new HashSet<String>());
+  }
+
+  public List<Map<String, String>> generateNotebooksInfo(boolean needsReload,
+       AuthenticationInfo subject, HashSet<String> userAndRoles) {
     Notebook notebook = notebook();
+    NotebookAuthorization notebookAuthorization = notebook.getNotebookAuthorization();
 
     ZeppelinConfiguration conf = notebook.getConf();
     String homescreenNotebookId = conf.getString(ConfVars.ZEPPELIN_NOTEBOOK_HOMESCREEN);
@@ -377,6 +383,11 @@ public class NotebookServer extends WebSocketServlet implements
         continue;
       }
 
+      if (userAndRoles.size() >= 0
+          && !notebookAuthorization.isReader(note.id(), userAndRoles)) {
+        continue;
+      }
+
       info.put("id", note.id());
       info.put("name", note.getName());
       notesInfo.add(info);
@@ -394,8 +405,9 @@ public class NotebookServer extends WebSocketServlet implements
     broadcastAll(new Message(OP.NOTES_INFO).put("notes", notesInfo));
   }
 
-  public void unicastNoteList(NotebookSocket conn, AuthenticationInfo subject) {
-    List<Map<String, String>> notesInfo = generateNotebooksInfo(false, subject);
+  public void unicastNoteList(NotebookSocket conn,
+       AuthenticationInfo subject, HashSet<String> userAndRoles) {
+    List<Map<String, String>> notesInfo = generateNotebooksInfo(false, subject, userAndRoles);
     unicast(new Message(OP.NOTES_INFO).put("notes", notesInfo), conn);
   }
 

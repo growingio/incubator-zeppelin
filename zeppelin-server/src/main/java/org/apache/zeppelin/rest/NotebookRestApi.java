@@ -55,9 +55,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
-import java.io.StringReader;
+
 /**
  * Rest api endpoint for the noteBook.
  */
