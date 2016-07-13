@@ -1030,7 +1030,17 @@ public class NotebookServer extends WebSocketServlet implements
     AuthenticationInfo subject = new AuthenticationInfo(fromMessage.principal);
     note.persist(subject);
     try {
+      LOG.info(
+          " user:[" + subject.getUser() + "]" +
+          " note:[" + note.getName() + "(" + note.getId() + ")]" +
+          " paragraph:[" + p.getTitle() + "]" +
+          " started");
       note.run(paragraphId);
+      LOG.info(
+          " user:[" + subject.getUser() + "]" +
+          " note:[" + note.getName() + "(" + note.getId() + ")]" +
+          " paragraph:[" + p.getTitle() + "]" +
+          " finished");
     } catch (Exception ex) {
       LOG.error("Exception from run", ex);
       if (p != null) {
