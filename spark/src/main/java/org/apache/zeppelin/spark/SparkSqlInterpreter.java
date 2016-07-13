@@ -48,7 +48,7 @@ public class SparkSqlInterpreter extends Interpreter {
   AtomicInteger num = new AtomicInteger(0);
 
   private String getJobGroup(InterpreterContext context){
-    return "zeppelin-" + context.getParagraphId();
+    return "zeppelin-" + context.getNoteId() + "-[" + context.getParagraphTitle() + "]";
   }
 
   private int maxResult;
