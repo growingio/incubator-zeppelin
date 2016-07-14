@@ -19,17 +19,17 @@ package org.apache.zeppelin.spark;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.spark.SparkContext;
 import org.apache.spark.sql.SQLContext;
 import org.apache.zeppelin.interpreter.Interpreter;
 import org.apache.zeppelin.interpreter.InterpreterContext;
-import org.apache.zeppelin.interpreter.InterpreterGroup;
 import org.apache.zeppelin.interpreter.InterpreterException;
-import org.apache.zeppelin.interpreter.InterpreterPropertyBuilder;
 import org.apache.zeppelin.interpreter.InterpreterResult;
 import org.apache.zeppelin.interpreter.InterpreterResult.Code;
 import org.apache.zeppelin.interpreter.LazyOpenInterpreter;
@@ -90,6 +90,10 @@ public class SparkSqlInterpreter extends Interpreter {
 
   @Override
   public InterpreterResult interpret(String st, InterpreterContext context) {
+    if (hasInvalidAction(st, context.getAuthenticationInfo().getRoles()))
+      return new InterpreterResult(Code.ERROR,
+              "You doesn't have permission to do the drop/delete action");
+
     SQLContext sqlc = null;
     SparkInterpreter sparkInterpreter = getSparkInterpreter();
 
@@ -180,5 +184,19 @@ public class SparkSqlInterpreter extends Interpreter {
   @Override
   public List<InterpreterCompletion> completion(String buf, int cursor) {
     return null;
+  }
+
+  private boolean hasInvalidAction(String sqlStr, Set<String> roles)  {
+
+    if (!roles.contains("dev")) {
+      String lowerCaseSql = sqlStr.toLowerCase();
+      List<String> invalidOperators = Arrays.asList("alter ", "drop ", "delete ");
+      for (String operator: invalidOperators) {
+        if (lowerCaseSql.indexOf(operator) > 0)
+          return false;
+      }
+    }
+
+    return true;
   }
 }

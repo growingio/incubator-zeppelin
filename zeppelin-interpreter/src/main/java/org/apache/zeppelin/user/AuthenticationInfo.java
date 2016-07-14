@@ -18,33 +18,52 @@
 
 package org.apache.zeppelin.user;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /***
  *
  */
 public class AuthenticationInfo {
   String user;
+  Set<String> roles = new HashSet<>();
   String ticket;
   UserCredentials userCredentials;
 
   public AuthenticationInfo() {}
 
-  public AuthenticationInfo(String user) {
+  public AuthenticationInfo(String user, Set<String> role) {
     this.user = user;
+    this.roles = role;
+  }
+
+  public AuthenticationInfo(Set<String> userAndRoles) {
+    List<String> userRoleList = new ArrayList<String>(userAndRoles);
+    this.user = userRoleList.get(0);
+    if (userRoleList.size() > 1) {
+      this.roles = new HashSet<>(userRoleList.subList(1, userRoleList.size()));
+    }
   }
 
   /***
    *
    * @param user
+   * @param roles
    * @param ticket
    */
-  public AuthenticationInfo(String user, String ticket) {
+  public AuthenticationInfo(String user, Set<String> roles, String ticket) {
     this.user = user;
+    this.roles = roles;
     this.ticket = ticket;
   }
 
   public String getUser() {
     return user;
   }
+
+  public Set<String> getRoles() { return roles; }
 
   public void setUser(String user) {
     this.user = user;
