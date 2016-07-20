@@ -22,7 +22,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.pegdown.Extensions;
+import org.pegdown.LinkRenderer;
 import org.pegdown.PegDownProcessor;
+import org.pegdown.ast.RootNode;
 
 import java.util.Properties;
 
@@ -51,7 +53,7 @@ public class MarkdownTest {
     md.open();
 
     InterpreterResult tblRe = md.interpret(tbl, null);
-    assertEquals("<table>\n" +
+    assertEquals("<table class=\"table table-bordered table-striped table-condensed\">\n" +
         "  <thead>\n" +
         "    <tr>\n" +
         "      <th>First </th>\n" +
@@ -81,6 +83,16 @@ public class MarkdownTest {
   public void testPegDownProcessor() {
     PegDownProcessor processor = new PegDownProcessor(Extensions.ALL);
     String re = processor.markdownToHtml(tbl);
+    System.out.println(re);
+  }
+
+  @Test
+  public void testPegDownProcessor2() {
+    PegDownProcessor processor = new PegDownProcessor(Extensions.ALL);
+    RootNode astRoot = processor.parseMarkdown(tbl.toCharArray());
+
+
+    String re = new GIOToHtmlSerializer(new LinkRenderer()).toHtml(astRoot);
     System.out.println(re);
   }
 
