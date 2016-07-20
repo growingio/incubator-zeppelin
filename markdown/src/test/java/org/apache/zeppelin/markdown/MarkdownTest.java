@@ -17,33 +17,71 @@
 
 package org.apache.zeppelin.markdown;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Properties;
-
 import org.apache.zeppelin.interpreter.InterpreterResult;
-import org.apache.zeppelin.markdown.Markdown;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.pegdown.Extensions;
+import org.pegdown.PegDownProcessor;
+
+import java.util.Properties;
+
+import static org.junit.Assert.assertEquals;
 
 public class MarkdownTest {
 
-	@Before
-	public void setUp() throws Exception {
-	}
+  @Before
+  public void setUp() throws Exception {
+  }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+  @After
+  public void tearDown() throws Exception {
+  }
 
-	@Test
-	public void test() {
-		Markdown md = new Markdown(new Properties());
-		md.open();
-		InterpreterResult result = md.interpret("This is ~~deleted~~ text", null);
-		assertEquals("<p>This is <s>deleted</s> text</p>\n", result.message());
-		System.out.println(MarkdownTest.class.getName());
-	}
+
+  String tbl = "  First   | Second \n" +
+      "  ------------- | -------------\n" +
+      "  Content Cell  | Content Cell\n" +
+      "  Content Cell  | Content Cell";
+  String link = "[like this](http://someurl)";
+
+  @Test
+  public void testMarkdown() {
+    Markdown md = new Markdown(new Properties());
+    md.open();
+
+    InterpreterResult tblRe = md.interpret(tbl, null);
+    assertEquals("<table>\n" +
+        "  <thead>\n" +
+        "    <tr>\n" +
+        "      <th>First </th>\n" +
+        "      <th>Second</th>\n" +
+        "    </tr>\n" +
+        "  </thead>\n" +
+        "  <tbody>\n" +
+        "    <tr>\n" +
+        "      <td>Content Cell </td>\n" +
+        "      <td>Content Cell</td>\n" +
+        "    </tr>\n" +
+        "    <tr>\n" +
+        "      <td>Content Cell </td>\n" +
+        "      <td>Content Cell</td>\n" +
+        "    </tr>\n" +
+        "  </tbody>\n" +
+        "</table>", tblRe.message());
+    System.out.println(tblRe.message());
+
+    InterpreterResult linkRe = md.interpret(link, null);
+    assertEquals("<p><a href=\"http://someurl\">like this</a></p>", linkRe.message());
+    System.out.println(linkRe.message());
+  }
+
+
+  @Test
+  public void testPegDownProcessor() {
+    PegDownProcessor processor = new PegDownProcessor(Extensions.ALL);
+    String re = processor.markdownToHtml(tbl);
+    System.out.println(re);
+  }
 
 }

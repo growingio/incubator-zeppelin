@@ -17,10 +17,6 @@
 
 package org.apache.zeppelin.markdown;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
-
 import org.apache.zeppelin.interpreter.Interpreter;
 import org.apache.zeppelin.interpreter.InterpreterContext;
 import org.apache.zeppelin.interpreter.InterpreterResult;
@@ -29,15 +25,19 @@ import org.apache.zeppelin.interpreter.InterpreterUtils;
 import org.apache.zeppelin.interpreter.thrift.InterpreterCompletion;
 import org.apache.zeppelin.scheduler.Scheduler;
 import org.apache.zeppelin.scheduler.SchedulerFactory;
-import org.markdown4j.Markdown4jProcessor;
+import org.pegdown.Extensions;
+import org.pegdown.PegDownProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Markdown interpreter for Zeppelin.
  */
 public class Markdown extends Interpreter {
-  private Markdown4jProcessor md;
+  private PegDownProcessor md;
   static final Logger LOGGER = LoggerFactory.getLogger(Markdown.class);
 
   static {
@@ -50,7 +50,7 @@ public class Markdown extends Interpreter {
 
   @Override
   public void open() {
-    md = new Markdown4jProcessor();
+    md = new PegDownProcessor(Extensions.ALL);
   }
 
   @Override
@@ -60,8 +60,8 @@ public class Markdown extends Interpreter {
   public InterpreterResult interpret(String st, InterpreterContext interpreterContext) {
     String html;
     try {
-      html = md.process(st);
-    } catch (IOException | java.lang.RuntimeException e) {
+      html = md.markdownToHtml(st);
+    } catch (java.lang.RuntimeException e) {
       LOGGER.error("Exception in Markdown while interpret ", e);
       return new InterpreterResult(Code.ERROR, InterpreterUtils.getMostRelevantMessage(e));
     }
