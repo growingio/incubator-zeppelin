@@ -22,14 +22,14 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.6.1</version>
+    <version>GIO-0.6.1</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
   <artifactId>zeppelin-markdown</artifactId>
   <packaging>jar</packaging>
-  <version>0.6.1</version>
+  <version>GIO-0.6.1</version>
   <name>Zeppelin: Markdown interpreter</name>
 
   <dependencies>
@@ -41,9 +41,9 @@
     </dependency> 
 
     <dependency>
-      <groupId>org.commonjava.googlecode.markdown4j</groupId>
-      <artifactId>markdown4j</artifactId>
-      <version>2.2-cj-1.0</version>
+      <groupId>org.pegdown</groupId>
+      <artifactId>pegdown</artifactId>
+      <version>1.1.0</version>
     </dependency>
 
     <dependency>

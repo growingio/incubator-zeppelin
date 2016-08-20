@@ -1009,7 +1009,7 @@ public class SparkInterpreter extends Interpreter {
   }
 
   String getJobGroup(InterpreterContext context){
-    return "zeppelin-" + context.getParagraphId();
+    return "zeppelin-" + context.getNoteId() + "-[" + context.getParagraphTitle() + "]";
   }
 
   /**
@@ -1033,6 +1033,7 @@ public class SparkInterpreter extends Interpreter {
     synchronized (this) {
       z.setGui(context.getGui());
       sc.setJobGroup(getJobGroup(context), "Zeppelin", false);
+      sc.setJobDescription(context.getParagraphTitle());
       InterpreterResult r = interpretInput(lines, context);
       sc.clearJobGroup();
       return r;
@@ -1091,6 +1092,7 @@ public class SparkInterpreter extends Interpreter {
       scala.tools.nsc.interpreter.Results.Result res = null;
       try {
         res = interpret(incomplete + s);
+        sc.setJobDescription(context.getParagraphText() + "——" + incomplete + s);
       } catch (Exception e) {
         sc.clearJobGroup();
         out.setInterpreterOutput(null);

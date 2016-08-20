@@ -206,9 +206,12 @@ public class ZeppelinContext {
       Object df, int maxResult) {
     Object[] rows = null;
     Method take;
-    String jobGroup = "zeppelin-" + interpreterContext.getParagraphId();
-    sc.setJobGroup(jobGroup, "Zeppelin", false);
-
+    String jobGroup = "zeppelin-"
+        + interpreterContext.getNoteId()
+        + "-["
+        + interpreterContext.getParagraphTitle() + "]";
+    if (sc.getLocalProperty("spark.job.description") == null)
+      sc.setJobGroup(jobGroup, "Zeppelin", false);
     try {
       take = df.getClass().getMethod("take", int.class);
       rows = (Object[]) take.invoke(df, maxResult + 1);

@@ -30,6 +30,7 @@ import org.apache.zeppelin.interpreter.*;
 import org.apache.zeppelin.interpreter.Interpreter.FormType;
 import org.apache.zeppelin.interpreter.InterpreterResult.Code;
 import org.apache.zeppelin.resource.ResourcePool;
+import org.apache.zeppelin.util.ParamTransformer;
 import org.apache.zeppelin.scheduler.Job;
 import org.apache.zeppelin.scheduler.JobListener;
 import org.apache.zeppelin.scheduler.Scheduler;
@@ -270,7 +271,7 @@ public class Paragraph extends Job implements Serializable, Cloneable {
       scriptBody = extractVariablesFromAngularRegistry(scriptBody, inputs, angularRegistry);
 
       settings.setForms(inputs);
-      script = Input.getSimpleQuery(settings.getParams(), scriptBody);
+      script = Input.getSimpleQuery(ParamTransformer.transform(settings.getParams()), scriptBody);
     }
     logger().debug("RUN : " + script);
     try {

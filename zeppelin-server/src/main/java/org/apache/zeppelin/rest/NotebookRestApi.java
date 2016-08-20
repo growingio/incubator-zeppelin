@@ -159,7 +159,8 @@ public class NotebookRestApi {
             notebookAuthorization.getOwners(noteId),
             notebookAuthorization.getReaders(noteId),
             notebookAuthorization.getWriters(noteId));
-    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
     note.persist(subject);
     notebookServer.broadcastNote(note);
     return new JsonResponse<>(Status.OK).build();
@@ -226,7 +227,8 @@ public class NotebookRestApi {
   @Path("/")
   @ZeppelinApi
   public Response getNotebookList() throws IOException {
-    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
     List<Map<String, String>> notesInfo = notebookServer.generateNotebooksInfo(false, subject);
     return new JsonResponse<>(Status.OK, "", notesInfo ).build();
   }
@@ -269,7 +271,8 @@ public class NotebookRestApi {
   @Path("import")
   @ZeppelinApi
   public Response importNotebook(String req) throws IOException {
-    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
     Note newNote = notebook.importNote(req, null, subject);
     return new JsonResponse<>(Status.CREATED, "", newNote.getId()).build();
   }
@@ -287,7 +290,8 @@ public class NotebookRestApi {
     LOG.info("Create new notebook by JSON {}" , message);
     NewNotebookRequest request = gson.fromJson(message,
         NewNotebookRequest.class);
-    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
     Note note = notebook.createNote(subject);
     List<NewParagraphRequest> initialParagraphs = request.getParagraphs();
     if (initialParagraphs != null) {
@@ -321,7 +325,8 @@ public class NotebookRestApi {
   @ZeppelinApi
   public Response deleteNote(@PathParam("notebookId") String notebookId) throws IOException {
     LOG.info("Delete notebook {} ", notebookId);
-    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
     if (!(notebookId.isEmpty())) {
       Note note = notebook.getNote(notebookId);
       if (note != null) {
@@ -348,7 +353,8 @@ public class NotebookRestApi {
     NewNotebookRequest request = gson.fromJson(message,
         NewNotebookRequest.class);
     String newNoteName = request.getName();
-    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
     Note newNote = notebook.cloneNote(notebookId, newNoteName, subject);
     notebookServer.broadcastNote(newNote);
     notebookServer.broadcastNoteList(subject);
@@ -385,7 +391,8 @@ public class NotebookRestApi {
     p.setTitle(request.getTitle());
     p.setText(request.getText());
 
-    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
     note.persist(subject);
     notebookServer.broadcastNote(note);
     return new JsonResponse(Status.CREATED, "", p.getId()).build();
@@ -444,7 +451,8 @@ public class NotebookRestApi {
     try {
       note.moveParagraph(paragraphId, Integer.parseInt(newIndex), true);
 
-      AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+      AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
       note.persist(subject);
       notebookServer.broadcastNote(note);
       return new JsonResponse(Status.OK, "").build();
@@ -477,7 +485,8 @@ public class NotebookRestApi {
       return new JsonResponse(Status.NOT_FOUND, "paragraph not found.").build();
     }
 
-    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
     note.removeParagraph(paragraphId);
     note.persist(subject);
     notebookServer.broadcastNote(note);
@@ -586,7 +595,8 @@ public class NotebookRestApi {
       Map<String, Object> paramsForUpdating = request.getParams();
       if (paramsForUpdating != null) {
         paragraph.settings.getParams().putAll(paramsForUpdating);
-        AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+        AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
         note.persist(subject);
       }
     }
@@ -713,7 +723,8 @@ public class NotebookRestApi {
   public Response getJobListforNotebook() throws IOException, IllegalArgumentException {
     LOG.info("Get notebook jobs for job manager");
 
-    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
     List<Map<String, Object>> notebookJobs = notebook.getJobListforNotebook(false, 0, subject);
     Map<String, Object> response = new HashMap<>();
 
@@ -738,7 +749,8 @@ public class NotebookRestApi {
     LOG.info("Get updated notebook jobs lastUpdateTime {}", lastUpdateUnixTime);
 
     List<Map<String, Object>> notebookJobs;
-    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal());
+    AuthenticationInfo subject = new AuthenticationInfo(SecurityUtils.getPrincipal(),
+            SecurityUtils.getRoles());
     notebookJobs = notebook.getJobListforNotebook(false, lastUpdateUnixTime, subject);
     Map<String, Object> response = new HashMap<>();
 
