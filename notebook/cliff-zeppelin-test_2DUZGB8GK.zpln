@@ -1,0 +1,153 @@
+{
+  "paragraphs": [
+    {
+      "text": "%sh\ndate +%Y-%m-%d --date\u003d\"-1 day\"\ndate -d \u0027-1 day\u0027 \u0027+%Y-%m-%d\u0027",
+      "user": "gaoguanling",
+      "dateUpdated": "2018-10-18 16:44:15.890",
+      "config": {
+        "editorSetting": {
+          "language": "sh",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sh",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "date: illegal time format\nusage: date [-jnRu] [-d dst] [-r seconds] [-t west] [-v[+|-]val[ymwdHMS]] ... \n            [-f fmt date | [[[mm]dd]HH]MM[[cc]yy][.ss]] [+format]\nusage: date [-jnRu] [-d dst] [-r seconds] [-t west] [-v[+|-]val[ymwdHMS]] ... \n            [-f fmt date | [[[mm]dd]HH]MM[[cc]yy][.ss]] [+format]\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "ExitValue: 1"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1539852225459_884289515",
+      "id": "paragraph_1539852225459_884289515",
+      "dateCreated": "2018-10-18 16:43:45.459",
+      "dateStarted": "2018-10-18 16:44:15.895",
+      "dateFinished": "2018-10-18 16:44:15.919",
+      "status": "ERROR"
+    },
+    {
+      "text": "%sql\nselect \"${fromDate\u003d20181016}\"",
+      "user": "gaoguanling",
+      "dateUpdated": "2018-10-18 16:50:58.301",
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "`sh  echo 1`": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {
+          "fromDate": "`sh  echo 1`"
+        },
+        "forms": {
+          "fromDate": {
+            "type": "TextBox",
+            "name": "fromDate",
+            "defaultValue": "20181016",
+            "hidden": false
+          }
+        }
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "`sh  echo 1`\n`sh  echo 1`\n"
+          },
+          {
+            "type": "TEXT",
+            "data": ""
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1539852252774_-2113563187",
+      "id": "paragraph_1539852252774_-2113563187",
+      "dateCreated": "2018-10-18 16:44:12.774",
+      "dateStarted": "2018-10-18 16:50:58.221",
+      "dateFinished": "2018-10-18 16:50:58.276",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\n",
+      "user": "gaoguanling",
+      "dateUpdated": "2018-10-18 16:50:30.879",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1539852630879_235484307",
+      "id": "paragraph_1539852630879_235484307",
+      "dateCreated": "2018-10-18 16:50:30.879",
+      "status": "READY"
+    }
+  ],
+  "name": "cliff-zeppelin-test",
+  "id": "2DUZGB8GK",
+  "defaultInterpreterGroup": "spark",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

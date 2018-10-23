@@ -45,10 +45,12 @@ fi
 
 HOSTNAME=$(hostname)
 ZEPPELIN_LOGFILE="${ZEPPELIN_LOG_DIR}/zeppelin-${ZEPPELIN_IDENT_STRING}-${HOSTNAME}.log"
+ZEPPELIN_GIO_LOGFILE="${ZEPPELIN_GIO_LOG_DIR}/PO-$(date +%Y-%m-%d).log"
 LOG="${ZEPPELIN_LOG_DIR}/zeppelin-cli-${ZEPPELIN_IDENT_STRING}-${HOSTNAME}.out"
   
 ZEPPELIN_SERVER=org.apache.zeppelin.server.ZeppelinServer
 JAVA_OPTS+=" -Dzeppelin.log.file=${ZEPPELIN_LOGFILE}"
+JAVA_OPTS+=" -Dzeppelin.gio-log.file=${ZEPPELIN_GIO_LOGFILE}"
 
 # construct classpath
 if [[ -d "${ZEPPELIN_HOME}/zeppelin-interpreter/target/classes" ]]; then

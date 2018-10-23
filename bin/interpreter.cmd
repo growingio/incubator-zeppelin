@@ -58,10 +58,15 @@ set HOSTNAME=%COMPUTERNAME%
 set ZEPPELIN_SERVER=org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer
 
 set ZEPPELIN_LOGFILE=%ZEPPELIN_LOG_DIR%\zeppelin-interpreter-%INTERPRETER_ID%-%ZEPPELIN_IDENT_STRING%-%HOSTNAME%.log
+set ZEPPELIN_GIO_LOGFILE=%ZEPPELIN_GIO_LOG_DIR%\PO-${date +%Y-%m-%d}.log
 
 if not exist "%ZEPPELIN_LOG_DIR%" (
     echo Log dir doesn't exist, create %ZEPPELIN_LOG_DIR%
     mkdir "%ZEPPELIN_LOG_DIR%"
+)
+if not exist "%ZEPPELIN_GIO_LOG_DIR%" (
+    echo Log dir doesn't exist, create %ZEPPELIN_GIO_LOG_DIR%
+    mkdir "%ZEPPELIN_GIO_LOG_DIR%"
 )
 
 if /I "%INTERPRETER_ID%"=="spark" (

@@ -32,9 +32,9 @@ import java.util.List;
  * Simple Helium registry on local filesystem
  */
 public class HeliumLocalRegistry extends HeliumRegistry {
-  private Logger logger = LoggerFactory.getLogger(HeliumLocalRegistry.class);
+  protected Logger logger = LoggerFactory.getLogger(HeliumLocalRegistry.class);
 
-  private final Gson gson;
+  protected final Gson gson;
 
   public HeliumLocalRegistry(String name, String uri) {
     super(name, uri);
@@ -65,7 +65,7 @@ public class HeliumLocalRegistry extends HeliumRegistry {
     return result;
   }
 
-  private HeliumPackage readPackageInfo(File f) {
+  protected HeliumPackage readPackageInfo(File f) {
     try {
       JsonReader reader = new JsonReader(new StringReader(FileUtils.readFileToString(f)));
       reader.setLenient(true);

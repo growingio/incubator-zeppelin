@@ -38,9 +38,11 @@ call "%bin%\common.cmd"
 
 set HOSTNAME=%COMPUTERNAME%
 set ZEPPELIN_LOGFILE=%ZEPPELIN_LOG_DIR%\zeppelin-%ZEPPELIN_IDENT_STRING%-%HOSTNAME%.log
+set ZEPPELIN_GIO_LOGFILE=%ZEPPELIN_GIO_LOG_DIR%\zeppelin-%ZEPPELIN_IDENT_STRING%-%HOSTNAME%.log
 
 set ZEPPELIN_SERVER=org.apache.zeppelin.server.ZeppelinServer
 set JAVA_OPTS=%JAVA_OPTS% -Dzeppelin.log.file="%ZEPPELIN_LOGFILE%"
+set JAVA_OPTS=%JAVA_OPTS% -Dzeppelin.gio-log.file="%ZEPPELIN_GIO_LOGFILE%"
 
 if exist "%ZEPPELIN_HOME%\zeppelin-interpreter\target\classes" (
     set ZEPPELIN_CLASSPATH=%ZEPPELIN_CLASSPATH%;"%ZEPPELIN_HOME%\zeppelin-interpreter\target\classes"
@@ -77,6 +79,10 @@ if not defined ZEPPELIN_CLASSPATH_OVERRIDES (
 if not exist %ZEPPELIN_LOG_DIR% (
     echo Log dir doesn't exist, create %ZEPPELIN_LOG_DIR%
     mkdir "%ZEPPELIN_LOG_DIR%"
+)
+if not exist %ZEPPELIN_GIO_LOG_DIR% (
+    echo Log dir doesn't exist, create %ZEPPELIN_GIO_LOG_DIR%
+    mkdir "%ZEPPELIN_GIO_LOG_DIR%"
 )
 
 if not exist %ZEPPELIN_PID_DIR% (
