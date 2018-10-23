@@ -27,7 +27,9 @@ bin=$(cd "${bin}">/dev/null; pwd)
 
 ZEPPELIN_INSTALL_INTERPRETER_MAIN=org.apache.zeppelin.interpreter.install.InstallInterpreter
 ZEPPELIN_LOGFILE="${ZEPPELIN_LOG_DIR}/install-interpreter.log"
+ZEPPELIN_GIO_LOGFILE="${ZEPPELIN_GIO_LOG_DIR}/PO-$(date +%Y-%m-%d).log"
 JAVA_OPTS+=" -Dzeppelin.log.file=${ZEPPELIN_LOGFILE}"
+JAVA_OPTS+=" -Dzeppelin.gio-log.file=${ZEPPELIN_GIO_LOGFILE}"
 
 if [[ -d "${ZEPPELIN_HOME}/zeppelin-zengine/target/classes" ]]; then
   ZEPPELIN_CLASSPATH+=":${ZEPPELIN_HOME}/zeppelin-zengine/target/classes"

@@ -28,6 +28,9 @@ if not defined ZEPPELIN_CONF_DIR (
 if not defined ZEPPELIN_LOG_DIR (
     set ZEPPELIN_LOG_DIR=%ZEPPELIN_HOME%\logs
 )
+if not defined ZEPPELIN_GIO_LOG_DIR (
+    set ZEPPELIN_GIO_LOG_DIR=%ZEPPELIN_HOME%\gio-logs
+)
 
 if not defined ZEPPELIN_PID_DIR (
     set ZEPPELIN_PID_DIR=%ZEPPELIN_HOME%\run

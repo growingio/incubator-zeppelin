@@ -8,7 +8,6 @@
 **License:** [Apache 2.0](https://github.com/apache/zeppelin/blob/master/LICENSE)
 
 
-**Zeppelin**, a web-based notebook that enables interactive data analytics. You can make beautiful data-driven, interactive and collaborative documents with SQL, Scala and more.
 
 Core feature:
    * Web based notebook style editor.

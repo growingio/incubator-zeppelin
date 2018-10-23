@@ -60,6 +60,7 @@ import org.apache.zeppelin.ticket.TicketContainer;
 import org.apache.zeppelin.types.InterpreterSettingsList;
 import org.apache.zeppelin.user.AuthenticationInfo;
 import org.apache.zeppelin.util.WatcherSecurityKey;
+import org.apache.zeppelin.utils.GIOParagraphListenerImpl;
 import org.apache.zeppelin.utils.InterpreterBindingUtils;
 import org.apache.zeppelin.utils.SecurityUtils;
 import org.eclipse.jetty.websocket.api.WebSocketException;
@@ -2285,20 +2286,24 @@ public class NotebookServer extends WebSocketServlet
 
     private NotebookServer notebookServer;
     private Note note;
+    private GIOParagraphListenerImpl gioParagraphListener;
 
     public ParagraphListenerImpl(NotebookServer notebookServer, Note note) {
       this.notebookServer = notebookServer;
       this.note = note;
+      this.gioParagraphListener = new GIOParagraphListenerImpl(notebookServer,note);
     }
 
     @Override
     public void onProgressUpdate(Job job, int progress) {
       notebookServer.broadcast(note.getId(),
           new Message(OP.PROGRESS).put("id", job.getId()).put("progress", progress));
+      gioParagraphListener.onProgressUpdate(job,progress);
     }
 
     @Override
     public void beforeStatusChange(Job job, Status before, Status after) {
+        gioParagraphListener.beforeStatusChange(job,before,after);
     }
 
     @Override
@@ -2334,6 +2339,8 @@ public class NotebookServer extends WebSocketServlet
       } catch (IOException e) {
         LOG.error("can not broadcast for job manager {}", e);
       }
+
+      gioParagraphListener.afterStatusChange(job,before,after);
     }
 
     /**
@@ -2345,6 +2352,7 @@ public class NotebookServer extends WebSocketServlet
           new Message(OP.PARAGRAPH_APPEND_OUTPUT).put("noteId", paragraph.getNote().getId())
               .put("paragraphId", paragraph.getId()).put("data", output);
 
+      gioParagraphListener.onOutputAppend(paragraph,idx,output);
       notebookServer.broadcast(paragraph.getNote().getId(), msg);
     }
 
@@ -2357,12 +2365,13 @@ public class NotebookServer extends WebSocketServlet
       Message msg =
           new Message(OP.PARAGRAPH_UPDATE_OUTPUT).put("noteId", paragraph.getNote().getId())
               .put("paragraphId", paragraph.getId()).put("data", output);
-
+        gioParagraphListener.onOutputUpdate(paragraph,idx,result);
       notebookServer.broadcast(paragraph.getNote().getId(), msg);
     }
 
     @Override
     public void onOutputUpdateAll(Paragraph paragraph, List<InterpreterResultMessage> msgs) {
+        gioParagraphListener.onOutputUpdateAll(paragraph,msgs);
       // TODO
     }
   }
