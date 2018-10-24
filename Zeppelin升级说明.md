@@ -38,13 +38,13 @@ mvn package -DskipTests -Dcheckstyle.skip  -Pspark-2.0 -Phadoop-2.4 -Pr -Pscala-
 * 将`Paragraph`执行日志独立到`PO-YYYY-MM-DD.log`中，每天一个文件。(`op`是`paragraph-operation`的缩写)
 * 日志格式:
   * 运行一个`Paragraph`
-   `GIO Paragraph Start: paragraph_id: {}  interpreter: {} info:[note_name: {} , user: {} , roles: {}]`
+      `GIO-Paragraph [Start]: paragraph_id:{} interpreter:{} info:[note_name:{} user:{} roles:{}]`
   * 处理Script：
-      `GIO Paragraph RUN: paragraph_id:{}  script:{} interpreter:{} info:[note_name:{},user:{},roles:{}]`
+      `GIO-Paragraph [RUN]: paragraph_id:{} interpreter:{} info:[note_name:{},user:{},roles:{}] script:\n{}`
   * 执行成功:
-    `"GIO Paragraph {}: paragraph_id: {}  info:[note_name:{},user:{},roles:{}]"`
+     `GIO-Paragraph [{}]: paragraph_id:{}  info:[note_name:{},user:{},roles:{}]`
   * 执行失败:
-  	`GIO Paragraph {}: paragraph_id: {}  exception: {}, result: {},info:[note_name:{},user:{},roles:{}]`
+  	 `GIO-Paragraph [{}]: paragraph_id:{}  info:[note_name:{},user:{},roles:{}] result:{} exception:\n{}`
 
 ### 2. 在Form表单中执行`shell`和`js`脚本
 
