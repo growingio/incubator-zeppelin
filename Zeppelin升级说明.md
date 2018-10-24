@@ -23,6 +23,18 @@ mvn package -DskipTests -Dcheckstyle.skip  -Pspark-2.0 -Phadoop-2.4 -Pr -Pscala-
 ./bin/zeppelin-daemon.sh start
 ```
 
+打包命令：
+
+```
+mvn clean package -Dcheckstyle.skip  -DskipTests -Pbuild-distr -Pspark-2.3.1  -Phadoop-3.11  -Pscala-2.11
+
+```
+GIO 环境打包命令：(spark和hadoop版本)
+```
+mvn clean package -Dcheckstyle.skip  -DskipTests -Pbuild-distr -Pspark-2.11  -Phadoop-2.5.2  -Pscala-2.11
+```
+打包之后在`zeppelin-distribution/target`目录中
+
 ### 采坑
 
 * webpack升级到`webpack@^3.0.0`
