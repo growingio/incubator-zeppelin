@@ -69,7 +69,7 @@
 ## Use provided spark installation ##
 ## defining SPARK_HOME makes Zeppelin run spark interpreter process using spark-submit
 ##
-# export SPARK_HOME                             # (required) When it is defined, load it instead of Zeppelin embedded Spark libraries
+export SPARK_HOME=/usr/local/spark                           # (required) When it is defined, load it instead of Zeppelin embedded Spark libraries
 # export SPARK_SUBMIT_OPTIONS                   # (optional) extra options to pass to spark submit. eg) "--driver-memory 512M --executor-memory 1G".
 # export SPARK_APP_NAME                         # (optional) The name of spark application.
 
@@ -78,7 +78,7 @@
 ## however, it is not encouraged when you can define SPARK_HOME
 ##
 # Options read in YARN client mode
-# export HADOOP_CONF_DIR         		# yarn-site.xml is located in configuration directory in HADOOP_CONF_DIR.
+export HADOOP_CONF_DIR=/usr/local/Cellar/hadoop/3.1.1/libexec/etc/hadoop         		# yarn-site.xml is located in configuration directory in HADOOP_CONF_DIR.
 # Pyspark (supported with Spark 1.2.1 and above)
 # To configure pyspark, you need to set spark distribution's path to 'spark.home' property in Interpreter setting screen in Zeppelin GUI
 # export PYSPARK_PYTHON          		# path to the python command. must be the same path on the driver(Zeppelin) and all workers.
