@@ -56,13 +56,16 @@ public class GIOParagraphListenerImpl implements ParagraphJobListener {
         if (job instanceof Paragraph && job.isTerminated()) {
             Paragraph paragraphJob = (Paragraph) job;
             if (paragraphJob.getStatus() == Job.Status.FINISHED) {
-                gio_logger.info("GIO Paragraph {}: paragraph_id: {}  info:[note_name:{},user:{},roles:{}]",
+                gio_logger.info("GIO-Paragraph [{}]: paragraph_id:{}  info:[note_name:{},user:{},roles:{}]",
                         paragraphJob.getStatus().toString().toUpperCase(), paragraphJob.getId(),
-                        paragraphJob.getNote().getName(), paragraphJob.getAuthenticationInfo().getUser(), paragraphJob.getAuthenticationInfo().getRoles().toString());
+                        paragraphJob.getNote().getName(), paragraphJob.getAuthenticationInfo().getUser(),
+                        paragraphJob.getAuthenticationInfo().getRoles().toString());
             } else {
-                gio_logger.warn("GIO Paragraph {}: paragraph_id: {}  exception: {}, result: {},info:[note_name:{},user:{},roles:{}]",
+                gio_logger.warn("GIO-Paragraph [{}]: paragraph_id:{}  info:[note_name:{},user:{},roles:{}] result:{} exception:\n{}",
                         paragraphJob.getStatus().toString().toUpperCase(), paragraphJob.getId(),
-                        paragraphJob.getException(), paragraphJob.getReturn(), paragraphJob.getNote().getName(), paragraphJob.getAuthenticationInfo().getUser(), paragraphJob.getAuthenticationInfo().getRoles().toString());
+                        paragraphJob.getNote().getName(), paragraphJob.getAuthenticationInfo().getUser(),
+                        paragraphJob.getAuthenticationInfo().getRoles().toString(),
+                        paragraphJob.getException(), paragraphJob.getReturn());
             }
         }
     }

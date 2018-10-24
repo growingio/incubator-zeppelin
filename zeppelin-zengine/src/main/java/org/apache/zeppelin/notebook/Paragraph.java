@@ -382,7 +382,7 @@ public class Paragraph extends Job implements Cloneable, JsonSerializable {
         logger.info("Run paragraph [paragraph_id: {}, interpreter: {}, note_id: {}, user: {}]",
                 getId(), intpText, note.getId(), authenticationInfo.getUser());
 
-        gio_logger.info("GIO Paragraph Start: paragraph_id: {}  interpreter: {} info:[note_name: {} , user: {} , roles: {}]",
+        gio_logger.info("GIO-Paragraph [Start]: paragraph_id:{} interpreter:{} info:[note_name:{} user:{} roles:{}]",
                 getId(), intpText, note.getName(), authenticationInfo.getUser(), authenticationInfo.getRoles());
 
         this.interpreter = getBindedInterpreter();
@@ -437,8 +437,8 @@ public class Paragraph extends Job implements Cloneable, JsonSerializable {
             script = Input.getSimpleQuery(ParamTransformer.transform(settings.getParams()), script, false);
         }
 
-        gio_logger.info("GIO Paragraph RUN: paragraph_id:{}  script:{} interpreter:{} info:[note_name:{},user:{},roles:{}]",
-                getId(), intpText,script, note.getName(), authenticationInfo.getUser(), authenticationInfo.getRoles());
+        gio_logger.info("GIO-Paragraph [RUN]: paragraph_id:{} interpreter:{} info:[note_name:{},user:{},roles:{}] script:\n{}",
+                getId(), intpText, note.getName(), authenticationInfo.getUser(), authenticationInfo.getRoles(), script);
 
         logger.debug("RUN : " + script);
         try {
