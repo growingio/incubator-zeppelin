@@ -132,7 +132,7 @@
         },
         "master": {
           "name": "master",
-          "value": "local[*]",
+          "value": "yarn-client",
           "type": "string"
         },
         "zeppelin.pyspark.python": {
