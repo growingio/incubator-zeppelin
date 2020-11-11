@@ -22,14 +22,14 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.8.2-SNAPSHOT</version>
+    <version>0.8.3</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
   <artifactId>zeppelin-web</artifactId>
   <packaging>war</packaging>
-  <version>0.8.2-SNAPSHOT</version>
+  <version>0.8.3</version>
   <name>Zeppelin: web Application</name>
 
   <!-- See https://github.com/eirslett/frontend-maven-plugin/issues/229 -->
@@ -88,7 +88,8 @@
             </goals>
             <configuration>
               <skip>${web.e2e.enabled}</skip>
-              <arguments>install --no-lockfile</arguments>
+<!--              <arguments>install &#45;&#45;no-lockfile</arguments>-->
+              <arguments>install</arguments>
             </configuration>
           </execution>
 

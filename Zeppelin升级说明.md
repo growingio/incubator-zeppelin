@@ -31,7 +31,7 @@ mvn clean package -Dcheckstyle.skip  -DskipTests -Pbuild-distr -Pspark-2.3.1  -P
 ```
 GIO 环境打包命令：(spark和hadoop版本)
 ```
-mvn clean package -Dcheckstyle.skip  -DskipTests -Pbuild-distr -Pspark-2.11  -Phadoop-2.5.2  -Pscala-2.11
+mvn clean package -Dcheckstyle.skip  -DskipTests -Pbuild-distr -Pspark-2.11  -Phadoop-2.7.3  -Pscala-2.11
 ```
 打包之后在`zeppelin-distribution/target`目录中
 
