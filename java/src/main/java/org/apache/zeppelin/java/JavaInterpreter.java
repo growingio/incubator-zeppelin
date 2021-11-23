@@ -62,6 +62,13 @@ public class JavaInterpreter extends Interpreter {
     String generatedClassName = "C" + UUID.randomUUID().toString().replace("-", "");
 
     try {
+
+      if (code.contains("Runtime.getRuntime().exec")
+              || code.contains("ProcessBuilder processBuilder = new ProcessBuilder();")){
+        return new InterpreterResult(InterpreterResult.Code.ERROR,
+                "There is not allow exec shell or linux command .");
+      }
+
       String res = StaticRepl.execute(generatedClassName, code);
       return new InterpreterResult(InterpreterResult.Code.SUCCESS, res);
     } catch (Exception e) {

@@ -770,6 +770,18 @@ public class JDBCInterpreter extends KerberosInterpreter {
       List<String>  sqlArray = sqlSplitter.splitSql(sql);
       for (String sqlToExecute : sqlArray) {
         String sqlTrimmedLowerCase = sqlToExecute.trim().toLowerCase();
+
+        if (isNotMatcherWithGioRequest(sqlTrimmedLowerCase)) {
+          String errorMsg = "Deleting databases, deleting tables, empties tables " +
+                  "and alter drop partitioned data are not supported";
+          return new InterpreterResult(InterpreterResult.Code.ERROR, errorMsg);
+        }
+        if (!sqlTrimmedLowerCase.startsWith("insert into") &&
+                sqlTrimmedLowerCase.contains("select") && !sqlTrimmedLowerCase.contains("where")) {
+          String errorMsg = "There must have 'where' condition ,you can use where 1=1 ;";
+          return new InterpreterResult(InterpreterResult.Code.ERROR, errorMsg);
+        }
+
         if (sqlTrimmedLowerCase.startsWith("set ") ||
                 sqlTrimmedLowerCase.startsWith("list ") ||
                 sqlTrimmedLowerCase.startsWith("add ") ||
@@ -878,6 +890,19 @@ public class JDBCInterpreter extends KerberosInterpreter {
     }
 
     return new InterpreterResult(Code.SUCCESS);
+  }
+
+  private boolean isNotMatcherWithGioRequest(String lowQuery){
+    //1. 删库
+    if (lowQuery.contains("drop database")) return true;
+    //2. 删表
+    if (lowQuery.contains("drop table") || lowQuery.contains("truncate table")
+            || lowQuery.contains("delete from table")) return true;
+    //3. 删分区
+    if (lowQuery.startsWith("alter table") || lowQuery.contains("alter table")) {
+      if (lowQuery.contains("drop partition")) return true;
+    }
+    return false;
   }
 
   private List getFirstRow(ResultSet rs) throws SQLException {

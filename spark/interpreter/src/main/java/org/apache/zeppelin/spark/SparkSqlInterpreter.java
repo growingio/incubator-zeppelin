@@ -102,6 +102,17 @@ public class SparkSqlInterpreter extends AbstractInterpreter {
       Method method = sqlContext.getClass().getMethod("sql", String.class);
       for (String sql : sqls) {
         curSql = sql;
+        String lowerCaseSql = curSql.toLowerCase();
+        if(isNotMatcherWithGioRequest(lowerCaseSql)){
+          String errorMsg = "Deleting databases, deleting tables, " +
+                  "empties tables, and alter drop partitioned data are not supported ！";
+          return new InterpreterResult(InterpreterResult.Code.ERROR, errorMsg);
+        }
+        if (!lowerCaseSql.startsWith("insert into") &&
+                lowerCaseSql.contains("select") && !lowerCaseSql.contains("where")) {
+          String errorMsg = "There must have 'where' condition ,you can use where 1=1 ;";
+          return new InterpreterResult(InterpreterResult.Code.ERROR, errorMsg);
+        }
         String result = sparkInterpreter.getZeppelinContext()
                 .showData(method.invoke(sqlContext, sql), maxResult);
         context.out.write(result);
@@ -148,6 +159,20 @@ public class SparkSqlInterpreter extends AbstractInterpreter {
     }
 
     return new InterpreterResult(Code.SUCCESS);
+  }
+
+  private boolean isNotMatcherWithGioRequest(String query){
+    String lowQuery = query.toLowerCase();
+    //1. 删库
+    if (lowQuery.contains("drop database")) return true;
+    //2. 删表
+    if (lowQuery.contains("drop table") || lowQuery.contains("truncate table")
+            || lowQuery.contains("delete from table")) return true;
+    //3. 删分区
+    if(lowQuery.startsWith("alter table") || lowQuery.contains("alter table")){
+      if (lowQuery.contains("drop partition")) return true;
+    }
+    return false;
   }
 
   @Override
