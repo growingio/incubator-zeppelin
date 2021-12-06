@@ -62,6 +62,7 @@ public class JavaInterpreter extends Interpreter {
     String generatedClassName = "C" + UUID.randomUUID().toString().replace("-", "");
 
     try {
+
       String res = StaticRepl.execute(generatedClassName, code);
       return new InterpreterResult(InterpreterResult.Code.SUCCESS, res);
     } catch (Exception e) {

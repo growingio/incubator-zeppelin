@@ -770,6 +770,7 @@ public class JDBCInterpreter extends KerberosInterpreter {
       List<String>  sqlArray = sqlSplitter.splitSql(sql);
       for (String sqlToExecute : sqlArray) {
         String sqlTrimmedLowerCase = sqlToExecute.trim().toLowerCase();
+
         if (sqlTrimmedLowerCase.startsWith("set ") ||
                 sqlTrimmedLowerCase.startsWith("list ") ||
                 sqlTrimmedLowerCase.startsWith("add ") ||
@@ -879,6 +880,7 @@ public class JDBCInterpreter extends KerberosInterpreter {
 
     return new InterpreterResult(Code.SUCCESS);
   }
+
 
   private List getFirstRow(ResultSet rs) throws SQLException {
     List list = new ArrayList();
