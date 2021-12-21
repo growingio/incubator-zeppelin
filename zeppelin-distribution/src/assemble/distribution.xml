@@ -86,9 +86,9 @@
     <fileSet>
       <directory>../notebook</directory>
     </fileSet>
-    <fileSet>
-      <directory>../plugins</directory>
-    </fileSet>
+<!--    <fileSet>-->
+<!--      <directory>../plugins</directory>-->
+<!--    </fileSet>-->
     <fileSet>
       <directory>../k8s</directory>
     </fileSet>
